@@ -1,4 +1,4 @@
-# ESP32 HDC1080 LIBRARY
+# ESP32 HDC1080 HAL LIBRARY
 This is an HDC1080 Hardware abstraction library that has been created for Open grStat using esp-idf.
 Feel free to use it in your projects, esp32-hdc1080.c provides you with an example on how to setup and use the library
 
