@@ -157,7 +157,7 @@ static esp_err_t write_hdc100_data(unsigned char i2c_register, unsigned char * w
   check_hdc1080_error(i2c_master_start(cmdlnk));
   check_hdc1080_error(i2c_master_write_byte(cmdlnk, (hdc1080_set.i2c_address << 1) | I2C_MASTER_WRITE, true));
   check_hdc1080_error(i2c_master_write_byte(cmdlnk, i2c_register, true));
-  check_hdc1080_error(i2c_master_write(cmdlnk, write_buff, write_len, true));
+  check_hdc1080_error(i2c_master_write(cmdlnk, write_buff, write_len, I2C_MASTER_LAST_NACK));
   check_hdc1080_error(i2c_master_stop(cmdlnk));
   esp_err_t err_ck = check_hdc1080_error(i2c_master_cmd_begin(hdc1080_set.i2c_port_number, cmdlnk, hdc1080_set.timeout_length));
   i2c_cmd_link_delete(cmdlnk);

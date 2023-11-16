@@ -14,8 +14,6 @@
 #define I2C_MASTER_RX_BUF_DISABLE (0)
 #define I2C_READ_TIMEOUT_PERIOD   ((TickType_t)200 / portTICK_PERIOD_MS)
 
-#define HDC1080_I2C_ADDRESS       0x40        /* I2C ADDRESS OF THE HDC1080 */
-
 static bool i2c_init(void);
 
 /* THIS IS THE CALLBACK FOR THE SENSOR READINGS,
@@ -25,8 +23,14 @@ static bool i2c_init(void);
  * THE VALUES ARE READ AND THEN RETURNED TO THIS CALLBACK 
  * ON COMPLETE. IF BOTH VALUES ARE 0 THEN AN ERROR MAY HAVE OCCURED */
 void temperature_readings_callback(hdc1080_sensor_readings_t sens_readings){
-  ESP_LOGI("SENS", "TEMP: %.2f C", sens_readings.temperature);
-  ESP_LOGI("SENS", "HUMI: %.2f %%", sens_readings.humidity);
+  /* HERE ARE SOME CONVERSION SAMPLES, THE MACROS ARE LOCATED IN hdc1080.h */
+  float temp_in_f = CEL2FAH(sens_readings.temperature);
+  float dewpoint = DEWPOINT(sens_readings.temperature, sens_readings.humidity);
+  float sat_vp = SVP(sens_readings.temperature);
+  float vpd_pasc = VPD(sat_vp, sens_readings.humidity);
+  ESP_LOGI("SENSOR_DATA", "TEMPERATURE: %.2f°C | %.2f°F", sens_readings.temperature, temp_in_f);
+  ESP_LOGI("SENSOR_DATA", "HUMIDITY: %.2f%%  -  DEWPOINT: %.2f°C | %.2f°F", sens_readings.humidity, dewpoint, CEL2FAH(dewpoint));
+  ESP_LOGI("SENSOR_DATA", "AIR SATURATION VAPOR PRESSURE: %.2f kPa  -  AIR VAPOR PRESSURE DEFICIT: %.2f kPa", PAS2KPA(sat_vp), vpd_pasc);
 }
 
 void app_main(void){
