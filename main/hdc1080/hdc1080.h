@@ -1,5 +1,5 @@
 /*
- * ESP32 HDC1080 HAL LIBRARY
+ * ESP32 HDC1080 DRIVER LIBRARY
  * Copyright 2023 Open grStat
  *
  * SPDX-FileCopyrightText: 2023 Open grStat https://github.com/grstat
