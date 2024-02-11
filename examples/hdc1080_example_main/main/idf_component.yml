@@ -1,0 +1,10 @@
+version: "0.2.0"
+description: "HDC1080 ESP32 USAGE EXAMPLE"
+url: "https://github.com/grstat/esp32-hdc1080/tree/main/examples/hdc1080_example_main"
+license: "Apache-2.0"
+dependencies:
+  ## Required IDF version
+  idf: ">=5.0"
+  grstat/hdc1080:
+    version: '^0.1.0'
+    override_path: '../../../'
