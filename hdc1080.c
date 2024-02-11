@@ -1,11 +1,11 @@
 /*
- * ESP32 HDC1080 DRIVER LIBRARY
+ * ESP32 HDC1080 COMPONENT DRIVER LIBRARY
  * Copyright 2023 Open grStat
  *
  * SPDX-FileCopyrightText: 2023 Open grStat https://github.com/grstat
  * SPDX-FileType: SOURCE
  * SPDX-FileContributor: Created by Adrian Borchardt
- * SPDX-License-Identifier: Apache 2.0
+ * SPDX-License-Identifier: Apache-2.0
  *
  */
 #include <string.h>
