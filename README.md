@@ -7,4 +7,4 @@ Texas Instruments. For more information visit: https://www.ti.com/product/HDC108
 
 ## Examples
 
-Here is an example on how to configure and use the driver [Example](https://github.com/grstat/esp32-hdc1080/examples):
+Here is an example on how to configure and use the driver [Example](https://github.com/grstat/esp32-hdc1080/tree/main/examples)
