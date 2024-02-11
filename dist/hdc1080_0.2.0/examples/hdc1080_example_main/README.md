@@ -49,17 +49,3 @@ Build the project and flash it to the board, then run monitor tool to view seria
 ```
 idf.py -p PORT flash monitor
 ```
-
-### EXAMPLE OUTPUT
-```
-I (347) main_task: Calling app_main()
-I (367) I2C: FOUND DEVICE AT ADDRESS: 0x40
-I (367) I2C: FOUND DEVICE AT ADDRESS: 0x44
-I (367) MAIN: HDC1080 CONFIGURATION SUCCESSFUL
-I (367) MAIN: READINGS WERE REQUESTED
-E (377) MAIN: REQUEST FAILED, CONVERSION IN PROGRESS
-I (377) main_task: Returned from app_main()
-I (867) SENSOR_DATA: TEMPERATURE: 24.16°C | 75.49°F
-I (877) SENSOR_DATA: HUMIDITY: 37.12%  -  DEWPOINT: 8.52°C | 47.34°F
-I (877) SENSOR_DATA: AIR SATURATION VAPOR PRESSURE: 3.01 kPa  -  AIR VAPOR PRESSURE DEFICIT: 1.89 kPa
-```

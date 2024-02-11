@@ -1,0 +1,7 @@
+dependencies:
+  idf:
+    version: '>=5.0'
+description: HDC1080 Driver for the ESP32
+license: Apache-2.0
+url: https://github.com/grstat/esp32-hdc1080/tree/main
+version: 0.2.0
