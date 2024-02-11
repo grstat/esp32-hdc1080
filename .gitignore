@@ -1,6 +1,7 @@
 #.gitignore
 .vscode
 build
+dist
 sdkconfig
 *.info
 *.ci
