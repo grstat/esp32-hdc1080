@@ -4,12 +4,8 @@
 #include <esp_system.h>
 #include <esp_event.h>
 #include <driver/i2c.h>
-#include "hdc1080/hdc1080.h"
+#include "hdc1080.h"
 
-#define I2C_SCL                   (22)
-#define I2C_SDA                   (21)
-#define I2C_PORT_MASTER           I2C_NUM_0
-#define I2C_MASTER_FREQ_HZ        (400000)    /* 400kHz */
 #define I2C_MASTER_TX_BUF_DISABLE (0)
 #define I2C_MASTER_RX_BUF_DISABLE (0)
 #define I2C_READ_TIMEOUT_PERIOD   ((TickType_t)200 / portTICK_PERIOD_MS)
@@ -41,7 +37,7 @@ void app_main(void){
     // FILL IN YOUR HDC SETTINGS
     hdc1080_settings_t hdc_settings = {
       .i2c_address = HDC1080_I2C_ADDRESS,
-      .i2c_port_number = I2C_PORT_MASTER,
+      .i2c_port_number = CONFIG_HDC1080_I2C_PORT_NUMBER,
       .timeout_length = I2C_READ_TIMEOUT_PERIOD,
       .callback = temperature_readings_callback
     };
@@ -93,20 +89,20 @@ static bool i2c_init(void){
   /* I2C MASTER MODE, PULLUPS ENABLED */
   i2c_config_t i2c_conf = {
       .mode = I2C_MODE_MASTER,
-      .sda_io_num = I2C_SDA,
-      .sda_pullup_en = GPIO_PULLUP_ENABLE,
-      .scl_io_num = I2C_SCL,
-      .scl_pullup_en = GPIO_PULLUP_ENABLE,
-      .master.clk_speed = I2C_MASTER_FREQ_HZ
+      .sda_io_num = CONFIG_HDC1080_I2C_SDA,
+      .sda_pullup_en = CONFIG_HDC1080_I2C_PULLUPS,
+      .scl_io_num = CONFIG_HDC1080_I2C_SCL,
+      .scl_pullup_en = CONFIG_HDC1080_I2C_PULLUPS,
+      .master.clk_speed = CONFIG_HDC1080_I2C_PORT_FREQUENCY
   };
   /* CONFIGURE THE PORT */
-  esp_err_t err = i2c_param_config(I2C_PORT_MASTER, &i2c_conf);
+  esp_err_t err = i2c_param_config(CONFIG_HDC1080_I2C_PORT_NUMBER, &i2c_conf);
   if (err != ESP_OK) {
     ESP_LOGE("I2C", "ERROR CONFIGURING I2C PORT %d", err);
     return false;
   }
   /* LOAD THE DRIVER */
-  err = i2c_driver_install(I2C_PORT_MASTER, i2c_conf.mode, I2C_MASTER_RX_BUF_DISABLE, I2C_MASTER_TX_BUF_DISABLE, 0);
+  err = i2c_driver_install(CONFIG_HDC1080_I2C_PORT_NUMBER, i2c_conf.mode, I2C_MASTER_RX_BUF_DISABLE, I2C_MASTER_TX_BUF_DISABLE, 0);
   if (err != ESP_OK) {
     if(err == ESP_ERR_INVALID_ARG){
       ESP_LOGE("I2C", "ERROR INSTALLING I2C DRIVER, INVALID ARGUMENT");
@@ -115,6 +111,8 @@ static bool i2c_init(void){
     }
     return false;
   }
+  
+#if CONFIG_HDC1080_I2C_SCAN_FOR_DEVICES
   /* DEVICE DISCOVERY */
   for(int ol = 0; ol < 128; ol += 16){
     for(int il =0; il < 16; il++){
@@ -123,7 +121,7 @@ static bool i2c_init(void){
       i2c_master_start(cmdlnk);
       i2c_master_write_byte(cmdlnk, (devAddr << 1) | I2C_MASTER_WRITE, I2C_MASTER_NACK);
       i2c_master_stop(cmdlnk);
-      esp_err_t lnkerr = i2c_master_cmd_begin(I2C_PORT_MASTER, cmdlnk, I2C_READ_TIMEOUT_PERIOD);
+      esp_err_t lnkerr = i2c_master_cmd_begin(CONFIG_HDC1080_I2C_PORT_NUMBER, cmdlnk, I2C_READ_TIMEOUT_PERIOD);
       i2c_cmd_link_delete(cmdlnk);
       switch(lnkerr){
         case ESP_OK:
@@ -154,5 +152,7 @@ static bool i2c_init(void){
       ESP_LOGI("I2C", "FOUND DEVICE AT ADDRESS: 0x%02X", devList[x]);
     } /** END - for(int x=0; x<devCount; x++) */
   }
+#endif
+
   return true;
 }
